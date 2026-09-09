@@ -1,0 +1,23 @@
+    column_name    |        data_type         
+-------------------+--------------------------
+ id                | bigint
+ registro_digital  | bigint
+ tipo              | text
+ materia           | text
+ expediente        | text
+ fecha_publicacion | text
+ fecha_normalizada | text
+ epoca             | text
+ instancia         | text
+ rubro             | text
+ resumen_ia        | text
+ hechos            | text
+ criterio_juridico | text
+ justificacion     | text
+ created_at        | timestamp with time zone
+ texto_vectorial   | text
+ embedding         | USER-DEFINED
+ clave_tesis       | text
+ archivo_origen    | text
+(19 rows)
+

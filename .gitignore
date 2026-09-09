@@ -1,0 +1,43 @@
+# ====================
+# PYTHON
+# ====================
+__pycache__/
+*.py[cod]
+*.so
+*.pyo
+*.pyd
+venv/
+env/
+.env
+
+# ====================
+# DATOS Y OUTPUTS
+# ====================
+output/
+data/
+*.log
+*.db
+*.sqlite3
+
+# ====================
+# CONFIGURACIONES
+# ====================
+config.yaml
+.env.local
+
+# ====================
+# EDITORES Y SISTEMA
+# ====================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ====================
+# OTROS
+# ====================
+*.tmp
+*.bak
+*.cct
+*.lit
+*.msg
