@@ -1,0 +1,19 @@
+import os
+import psycopg2
+import pandas as pd
+
+conn = psycopg2.connect(
+    dbname="practica_legal",
+    user="postgres",
+    password=os.getenv("PGPASSWORD", "6419"),
+    host="localhost",
+    port=5432
+)
+
+print("Leyendo de PostgreSQL...")
+df = pd.read_sql_query("SELECT * FROM jurisprudencias ORDER BY registro_digital ASC;", conn)
+conn.close()
+
+print("Guardando backup.parquet...")
+df.to_parquet("output/backup_jurisprudencias_20260918.parquet", engine="pyarrow", index=False)
+print("¡Listo!")
