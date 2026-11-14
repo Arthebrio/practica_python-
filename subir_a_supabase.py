@@ -84,6 +84,38 @@ def conectar_supabase():
     log("Supabase OK", "ok")
     return client
 
+# =============================================================================
+# PREPARACIÓN DE DATOS (Relleno automático de embedding_512)
+# =============================================================================
+def rellenar_embedding_512(conn):
+    """
+    Busca tesis que tengan el embedding de 1536 pero no el de 512,
+    y se lo genera automáticamente antes de subirlas.
+    """
+    log("Verificando que todos los embeddings de 512 estén generados...")
+    try:
+        cur = conn.cursor()
+        cur.execute("""
+            UPDATE jurisprudencias
+            SET embedding_512 = (
+                SELECT ('[' || array_to_string((string_to_array(trim(both '[]' from embedding::text), ','))[1:512], ',') || ']')::vector(512)
+            )
+            WHERE embedding_512 IS NULL;
+        """)
+        actualizados = cur.rowcount
+        conn.commit()
+        
+        if actualizados > 0:
+            log(f"Se rellenaron {actualizados} embeddings de 512 dims.", "ok")
+        else:
+            log("Todos los embeddings de 512 ya estaban listos.", "info")
+            
+    except Exception as e:
+        log(f"Error al rellenar embedding_512: {e}", "err")
+        conn.rollback()
+        sys.exit(1)
+
+
 
 # =============================================================================
 # DETECTAR PENDIENTES
@@ -209,8 +241,12 @@ def main():
     print("=" * 70)
     print()
 
-    # 1. Conectar
+       # 1. Conectar
     conn = conectar_local()
+    
+    # Rellenar automáticamente el embedding_512 antes de continuar
+    rellenar_embedding_512(conn)
+    
     client = conectar_supabase()
     print()
 
